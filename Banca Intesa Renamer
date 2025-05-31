@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Loop through all PDF files matching the pattern
+for file in [0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9]_*.pdf; do
+  # Skip if no files match
+  [ -e "$file" ] || continue
+
+  # Extract date and rest of filename
+  date_part=$(echo "$file" | cut -d'_' -f1)
+  rest=$(echo "$file" | cut -d'_' -f2-)
+
+  # Extract day, month, year
+  day=$(echo "$date_part" | cut -d'-' -f1)
+  month=$(echo "$date_part" | cut -d'-' -f2)
+  year=$(echo "$date_part" | cut -d'-' -f3)
+
+  # Construct new filename
+  new_file="${year}-${month}-${day}_${rest}"
+
+  # Rename the file
+  mv "$file" "$new_file"
+  echo "Renamed '$file' to '$new_file'"
+done
